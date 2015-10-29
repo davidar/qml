@@ -6,7 +6,7 @@ import QtQuick.Controls 1.4
 import "glcode.js" as GLCode
 
 Window {
-    title: "Waves"
+    title: "QML Demo"
     width: 800
     height: 480
     visible: true
@@ -22,10 +22,22 @@ Window {
                 Item {
                     width: parent.width/2
                     height: parent.height
-                    Label {
-                        anchors.centerIn: parent
-                        font.pixelSize: 22
-                        text: "Hello, world!"
+                    TextArea {
+                        id: code
+                        anchors.fill: parent
+                        readOnly: true
+                        text: "Loading..."
+
+                        Component.onCompleted: {
+                            var request = new XMLHttpRequest()
+                            request.open('GET', "qrc:/glcode.js")
+                            request.onreadystatechange = function(event) {
+                                if (request.readyState === XMLHttpRequest.DONE) {
+                                    code.text = request.responseText
+                                }
+                            }
+                            request.send()
+                        }
                     }
                 }
 
